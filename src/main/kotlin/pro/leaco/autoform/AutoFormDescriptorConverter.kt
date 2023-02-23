@@ -122,15 +122,15 @@ object AutoFormDescriptorConverter {
      * @return
      */
     fun convertToDescriptors(reflectInfo: ReflectInfo): Map<String, Any?> {
-        val src = reflectInfo.descriptor
+        val descriptor = reflectInfo.descriptor
         return mapOf(
-            "type" to if (src.componentType != AutoFormComponentType.AUTO) src.componentType.value else AutoFormComponentType.tryDetectedComponentType(
+            "type" to if (descriptor.componentType != AutoFormComponentType.AUTO) descriptor.componentType.value else AutoFormComponentType.tryDetectedComponentType(
                 reflectInfo.field.type
             ).value,
-            "label" to src.label,
-            "disabled" to src.disabled,
-            "defaultValue" to src.defaultValue.ifEmpty { reflectInfo.defaultValue },
-            "rules" to src.rules.map { r ->
+            "label" to descriptor.label,
+            "disabled" to descriptor.disabled,
+            "defaultValue" to descriptor.defaultValue.ifEmpty { reflectInfo.defaultValue },
+            "rules" to descriptor.rules.map { r ->
                 if (r.min >= 0 || r.max >= 0) {
                     check(r.type != FormValidType.EMPTY) { "写了 min, max 就必须设置类型" }
                 }
