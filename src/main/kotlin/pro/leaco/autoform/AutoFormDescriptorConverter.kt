@@ -92,8 +92,8 @@ object AutoFormDescriptorConverter {
      */
     fun <DATA> readReflectInfo(dataClazz: Class<DATA>): Map<String, ReflectInfo> {
         val instance = dataClazz.constructors.first { it.parameterCount == 0 }.newInstance()
-        val associate = dataClazz.declaredFields.associate { field ->
-            val descriptor = field.getAnnotation(FormDescriptor::class.java)
+        val associate = dataClazz.declaredFields.map { field ->
+            val descriptor = field.getAnnotation(FormDescriptor::class.java) ?: return@map null
             val defaultValue: Any? =
                 if (field.trySetAccessible()) {
                     field.get(instance)
@@ -101,7 +101,7 @@ object AutoFormDescriptorConverter {
                     null
                 }
             field.name to ReflectInfo(descriptor, field, defaultValue)
-        }
+        }.filterNotNull().toMap()
         return associate
     }
 
