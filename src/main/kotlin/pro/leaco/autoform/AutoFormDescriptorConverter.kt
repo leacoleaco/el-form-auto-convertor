@@ -21,14 +21,6 @@ object AutoFormDescriptorConverter {
         }
     }
 
-    fun toJsonTree(src: Any?): JsonElement? {
-        if (src == null) {
-            return null
-        }
-        return GSON.toJsonTree(src)
-    }
-
-
     /**
      * convert json object to Data
      * @param DATA the data's type
@@ -91,6 +83,7 @@ object AutoFormDescriptorConverter {
      * @return
      */
     fun <DATA> readReflectInfo(dataClazz: Class<DATA>): Map<String, ReflectInfo> {
+        check(dataClazz.constructors.any { it.parameterCount == 0 }) { "Class '$dataClazz' must have one constructor method with no parameters." }
         val instance = dataClazz.constructors.first { it.parameterCount == 0 }.newInstance()
         val associate = dataClazz.declaredFields.map { field ->
             val descriptor = field.getAnnotation(FormDescriptor::class.java) ?: return@map null
