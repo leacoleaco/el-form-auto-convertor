@@ -124,7 +124,7 @@ object AutoFormDescriptorConverter {
             "disabled" to descriptor.disabled,
             "defaultValue" to descriptor.defaultValue.ifEmpty { reflectInfo.defaultValue },
             "rules" to descriptor.rules.map { r ->
-                if (r.min >= 0 || r.max >= 0) {
+                if (r.min >= 0f || r.max >= 0f) {
                     check(r.type != FormValidType.EMPTY) { "写了 min, max 就必须设置类型" }
                 }
                 if (r.whitespace) {
