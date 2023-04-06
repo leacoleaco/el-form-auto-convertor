@@ -39,9 +39,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.version>1.8.0</kotlin.version>
     </properties>
