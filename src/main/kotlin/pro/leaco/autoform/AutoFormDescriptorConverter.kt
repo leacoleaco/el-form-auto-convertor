@@ -146,7 +146,10 @@ object AutoFormDescriptorConverter {
                     "enum" to if (r.enum.isNotEmpty()) r.enum else null,
                     "whitespace" to if (r.whitespace) true else null,
                 ).filter { it.second != null }.toMap()
-            }
+            },
+            "props" to descriptor.props.associate { p ->
+                p.name to p.value
+            },
         )
     }
 

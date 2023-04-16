@@ -1,7 +1,5 @@
 package pro.leaco.autoform
 
-import com.google.gson.*
-
 
 /**
  * 前端自动表单配置项
@@ -23,5 +21,10 @@ annotation class FormDescriptor(
     val defaultValue: String = "",
     val componentType: AutoFormComponentType = AutoFormComponentType.AUTO,
     val rules: Array<FormRule> = [],
-)
+    val props: Array<Property> = []
+) {
 
+    @Retention(AnnotationRetention.RUNTIME)
+    @Target(AnnotationTarget.FIELD)
+    annotation class Property(val name: String, val value: String)
+}
