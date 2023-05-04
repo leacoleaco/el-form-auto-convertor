@@ -21,10 +21,15 @@ annotation class FormDescriptor(
     val defaultValue: String = "",
     val componentType: AutoFormComponentType = AutoFormComponentType.AUTO,
     val rules: Array<FormRule> = [],
-    val props: Array<Property> = []
+    val props: Array<Property> = [],
+    val options: Array<Options> = [],
 ) {
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.FIELD)
     annotation class Property(val name: String, val value: String)
+
+    @Retention(AnnotationRetention.RUNTIME)
+    @Target(AnnotationTarget.FIELD)
+    annotation class Options(val label: String, val value: String)
 }

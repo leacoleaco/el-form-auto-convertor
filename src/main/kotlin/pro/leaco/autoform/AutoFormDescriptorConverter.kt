@@ -150,6 +150,12 @@ object AutoFormDescriptorConverter {
             "props" to descriptor.props.associate { p ->
                 p.name to p.value
             },
+            "options" to descriptor.options.map { p ->
+                mapOf(
+                    "label" to p.label,
+                    "value" to p.value,
+                )
+            },
         )
     }
 

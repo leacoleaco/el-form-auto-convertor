@@ -35,8 +35,8 @@ enum class AutoFormComponentType(val value: String) {
     /**regexp	正则表达式，必须是可以正确转化为 RegExp 实例的字符串	el-input*/
     REGEXP("regexp"),
 
-//    /**enum	枚举类型，需要和 enum, options 属性配合使用，值必须是 enum 数组中的一个	el-select*/
-//    ENUM("enum"),
+    /**enum	枚举类型，需要和 enum, options 属性配合使用，值必须是 enum 数组中的一个	el-select*/
+    ENUM("enum"),
 
     /**date	必须是合法的 Date 对象	el-date-picker*/
     DATE("date"),
