@@ -22,7 +22,7 @@ annotation class FormDescriptor(
     val componentType: AutoFormComponentType = AutoFormComponentType.AUTO,
     val rules: Array<FormRule> = [],
     val props: Array<Property> = [],
-    val options: Array<Options> = [],
+    val options: Array<Option> = [],
 ) {
 
     @Retention(AnnotationRetention.RUNTIME)
@@ -31,5 +31,5 @@ annotation class FormDescriptor(
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.FIELD)
-    annotation class Options(val label: String, val value: String)
+    annotation class Option(val label: String, val value: String)
 }
