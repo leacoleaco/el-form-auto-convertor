@@ -5,7 +5,7 @@ add maven dependency in pom.xml:
 <dependency>
     <groupId>pro.leaco.dev</groupId>
     <artifactId>autoform</artifactId>
-    <version>1.1.1</version>
+    |<version>1.1.2</version>
 </dependency>
 ```
 

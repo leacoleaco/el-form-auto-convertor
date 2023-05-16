@@ -1,5 +1,7 @@
 package pro.leaco.autoform
 
+import kotlin.reflect.KClass
+
 
 /**
  * 前端自动表单配置项
@@ -23,6 +25,7 @@ annotation class FormDescriptor(
     val rules: Array<FormRule> = [],
     val props: Array<Property> = [],
     val options: Array<Option> = [],
+    val itemsClass: KClass<*> = Any::class,
 ) {
 
     @Retention(AnnotationRetention.RUNTIME)

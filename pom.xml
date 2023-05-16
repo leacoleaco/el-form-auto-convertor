@@ -6,10 +6,10 @@
 
     <artifactId>autoform</artifactId>
     <groupId>pro.leaco.dev</groupId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
 
-    <url>https://github.com/leacoleaco/console-art</url>
+    <url>https://github.com/leacoleaco/el-form-auto-convertor</url>
     <name>el-form-auto-convertor</name>
     <description>An java json convert, auto convert json data to pojo, utils for
         https://github.com/leacoleaco/el-form-auto !

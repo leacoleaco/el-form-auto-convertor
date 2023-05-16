@@ -116,10 +116,24 @@ object AutoFormDescriptorConverter {
      */
     fun convertToDescriptors(reflectInfo: ReflectInfo): Map<String, Any?> {
         val descriptor = reflectInfo.descriptor
-        return mapOf(
-            "type" to if (descriptor.componentType != AutoFormComponentType.AUTO) descriptor.componentType.value else AutoFormComponentType.tryDetectedComponentType(
+
+        val componentType =
+            if (descriptor.componentType != AutoFormComponentType.AUTO) descriptor.componentType else AutoFormComponentType.tryDetectedComponentType(
                 reflectInfo.field.type
-            ).value,
+            )
+
+        val itemDescriptor = if (componentType == AutoFormComponentType.ARRAY) {
+            val itemClazz = descriptor.itemsClass
+            val itemReflectInfo = readReflectInfo(itemClazz.java)
+            val itemDesc = convertToDescriptors(itemReflectInfo)
+            mapOf(
+                "type" to AutoFormComponentType.OBJECT.value,
+                "fields" to itemDesc
+            )
+        } else null
+
+        return mapOf(
+            "type" to componentType.value,
             "label" to descriptor.label,
             "disabled" to descriptor.disabled,
             "defaultValue" to descriptor.defaultValue.ifEmpty { reflectInfo.defaultValue },
@@ -156,6 +170,7 @@ object AutoFormDescriptorConverter {
                     "value" to p.value,
                 )
             },
+            "itemDescriptor" to itemDescriptor
         )
     }
 
