@@ -26,6 +26,7 @@ annotation class FormDescriptor(
     val props: Array<Property> = [],
     val options: Array<Option> = [],
     val itemsClass: KClass<*> = Any::class,
+    val slotName: String = "",
 ) {
 
     @Retention(AnnotationRetention.RUNTIME)

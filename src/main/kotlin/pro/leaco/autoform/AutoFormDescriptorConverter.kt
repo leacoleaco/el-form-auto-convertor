@@ -170,6 +170,7 @@ object AutoFormDescriptorConverter {
                     "value" to p.value,
                 )
             },
+            "slotName" to descriptor.slotName.ifBlank { null },
             "itemDescriptor" to itemDescriptor
         )
     }
