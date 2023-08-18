@@ -171,6 +171,36 @@ object AutoFormDescriptorConverter {
                 )
             },
             "slotName" to descriptor.slotName.ifBlank { null },
+            "tooltip" to descriptor.tooltip.let {
+                if (it.content.isBlank()) return@let null
+                return@let mapOf(
+                    "content" to it.content,
+                    "placement" to it.placement,
+                    "effect" to it.effect,
+                    "offset" to it.offset,
+                    "transition" to it.transition,
+                    "showAfter" to it.showAfter,
+                    "showArrow" to it.showArrow,
+                    "hideAfter" to it.hideAfter,
+                    "autoClose" to it.autoClose,
+                    "trigger" to it.trigger,
+                )
+            },
+            "alert" to descriptor.alert.let {
+                if (it.message.isBlank()) return@let null
+                return@let mapOf(
+                    "message" to it.message,
+                    "type" to it.type,
+                    "showIcon" to it.showIcon,
+                    "closable" to it.closable,
+                    "center" to it.center,
+                    "effect" to it.effect,
+                    "title" to it.title,
+                    "description" to it.description,
+                    "closeText" to it.closeText,
+                )
+            },
+            "enumSourceKey" to descriptor.enumSourceKey,
             "itemDescriptor" to itemDescriptor
         )
     }
