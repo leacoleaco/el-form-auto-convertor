@@ -132,11 +132,22 @@ object AutoFormDescriptorConverter {
             )
         } else null
 
+        val wrapFieldDescriptor = if (componentType == AutoFormComponentType.WRAP) {
+            val wrapClass = reflectInfo.field.type
+            val itemReflectInfo = readReflectInfo(wrapClass)
+            convertToDescriptors(itemReflectInfo)
+        } else null
+
+        val defaultValue =
+            if (componentType !== AutoFormComponentType.WRAP)
+                descriptor.defaultValue.ifEmpty { reflectInfo.defaultValue }
+            else null
+
         return mapOf(
             "type" to componentType.value,
             "label" to descriptor.label,
-            "disabled" to descriptor.disabled,
-            "defaultValue" to descriptor.defaultValue.ifEmpty { reflectInfo.defaultValue },
+            "disabled" to if (descriptor.disabled) true else null,
+            "defaultValue" to defaultValue,
             "rules" to descriptor.rules.map { r ->
                 if (r.min >= 0f || r.max >= 0f) {
                     check(r.type != FormValidType.EMPTY) { "写了 min, max 就必须设置类型" }
@@ -160,16 +171,16 @@ object AutoFormDescriptorConverter {
                     "enum" to if (r.enum.isNotEmpty()) r.enum else null,
                     "whitespace" to if (r.whitespace) true else null,
                 ).filter { it.second != null }.toMap()
-            },
+            }.ifEmpty { null },
             "props" to descriptor.props.associate { p ->
                 p.name to p.value
-            },
+            }.ifEmpty { null },
             "options" to descriptor.options.map { p ->
                 mapOf(
                     "label" to p.label,
                     "value" to p.value,
                 )
-            },
+            }.ifEmpty { null },
             "slotName" to descriptor.slotName.ifBlank { null },
             "tooltip" to descriptor.tooltip.let {
                 if (it.content.isBlank()) return@let null
@@ -200,8 +211,10 @@ object AutoFormDescriptorConverter {
                     "closeText" to it.closeText,
                 )
             },
-            "enumSourceKey" to descriptor.enumSourceKey,
-            "itemDescriptor" to itemDescriptor
+            "enumSourceKey" to descriptor.enumSourceKey.ifBlank { null },
+            "labelPosition" to descriptor.labelPosition.value.ifBlank { null },
+            "itemDescriptor" to itemDescriptor?.ifEmpty { null },
+            "fields" to wrapFieldDescriptor?.ifEmpty { null },
         )
     }
 

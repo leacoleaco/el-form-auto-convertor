@@ -3,6 +3,11 @@ package pro.leaco.autoform
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+enum class AutoFormLabelPosition(val value: String) {
+    TOP("top"),
+    RIGHT("right"),
+}
+
 /**
  * 对应的vue表单组件类型
  */
@@ -44,11 +49,15 @@ enum class AutoFormComponentType(val value: String) {
     /**date	必须是合法的 DateTime 对象	el-date-time-picker*/
     DATE_TIME("datetime"),
 
-    /**object	object 类型，配合 fields 和 defaultField 使用	dynamic-form-item*/
+    /**object 类型，配合 fields 和 defaultField 使用	dynamic-form-item*/
     OBJECT("object"),
 
-    /**array	array 类型，配合 defaultField 使用	dynamic-form-item*/
-    ARRAY("array"), ;
+    /**array 类型，配合 defaultField 使用	dynamic-form-item*/
+    ARRAY("array"),
+
+    /** wrap 类型，配合 field 使用 dynamic-form-item*/
+    WRAP("wrap"),
+    ;
 
     companion object {
         fun parse(expr: String): AutoFormComponentType {
@@ -79,7 +88,7 @@ enum class AutoFormComponentType(val value: String) {
             else if (clazz == Regex::class.java) REGEXP
             else if (clazz == LocalDate::class.java) DATE
             else if (clazz == LocalDateTime::class.java) DATE_TIME
-            else UNKNOWN
+            else WRAP
         }
     }
 }

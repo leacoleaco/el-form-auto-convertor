@@ -32,6 +32,7 @@ annotation class FormDescriptor(
     val slotName: String = "",
     val tooltip: FormItemTooltip = FormItemTooltip(),
     val alert: FormItemAlert = FormItemAlert(),
+    val labelPosition: AutoFormLabelPosition = AutoFormLabelPosition.RIGHT,
     val enumSourceKey: String = "",
 ) {
 
