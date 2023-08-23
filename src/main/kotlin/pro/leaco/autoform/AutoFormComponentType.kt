@@ -88,6 +88,13 @@ enum class AutoFormComponentType(val value: String) {
             else if (clazz == Regex::class.java) REGEXP
             else if (clazz == LocalDate::class.java) DATE
             else if (clazz == LocalDateTime::class.java) DATE_TIME
+            else if (clazz == java.lang.Integer::class.java) NUMBER
+            else if (clazz == java.lang.Long::class.java) NUMBER
+            else if (clazz == java.lang.Float::class.java) NUMBER
+            else if (clazz == java.lang.Double::class.java) NUMBER
+            else if (clazz == java.lang.String::class.java) STRING
+            else if (clazz == java.lang.Character::class.java) STRING
+            else if (clazz == java.lang.Byte::class.java) STRING
             else WRAP
         }
     }
