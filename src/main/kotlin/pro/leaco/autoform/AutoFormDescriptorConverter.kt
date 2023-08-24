@@ -108,6 +108,10 @@ object AutoFormDescriptorConverter {
         return reflectInfoMap.asSequence().map { it.key to convertToDescriptors(it.value) }.toMap()
     }
 
+    fun readClazzDescriptors(dataClazz: Class<*>): Map<String, Any?> {
+        return convertToDescriptors(readReflectInfo(dataClazz))
+    }
+
     /**
      * convert reflect info to descriptors
      *
