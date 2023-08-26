@@ -49,14 +49,25 @@ enum class AutoFormComponentType(val value: String) {
     /**date	必须是合法的 DateTime 对象	el-date-time-picker*/
     DATE_TIME("datetime"),
 
-    /**object 类型，配合 fields 和 defaultField 使用	dynamic-form-item*/
-    OBJECT("object"),
+    /**
+     * 转换为滑块， 需要是数值类型
+     */
+    SLIDER("slider"),
+
+    /**
+     * 颜色选择
+     */
+    COLOR("color"),
 
     /**array 类型，配合 defaultField 使用	dynamic-form-item*/
     ARRAY("array"),
 
     /** wrap 类型，配合 field 使用 dynamic-form-item*/
     WRAP("wrap"),
+
+    /**object 类型，配合 fields 和 defaultField 使用	dynamic-form-item*/
+    OBJECT("object"),
+
     ;
 
     companion object {
@@ -98,4 +109,11 @@ enum class AutoFormComponentType(val value: String) {
             else WRAP
         }
     }
+}
+
+enum class AutoFormEnumComponent(val value: String) {
+    SELECT(""),
+    CHECKBOX("checkbox"),
+    RADIO("radio"),
+    CASCADER("cascader"),
 }

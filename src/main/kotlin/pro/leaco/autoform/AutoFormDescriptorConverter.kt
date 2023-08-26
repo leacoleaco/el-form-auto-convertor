@@ -216,6 +216,7 @@ object AutoFormDescriptorConverter {
                 )
             },
             "enumSourceKey" to descriptor.enumSourceKey.ifBlank { null },
+            "enumComponent" to descriptor.enumComponent.value.ifBlank { null },
             "labelPosition" to descriptor.labelPosition.value.ifBlank { null },
             "itemDescriptor" to itemDescriptor?.ifEmpty { null },
             "fields" to wrapFieldDescriptor?.ifEmpty { null },

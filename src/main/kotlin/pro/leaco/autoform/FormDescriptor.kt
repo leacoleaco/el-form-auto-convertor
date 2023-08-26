@@ -34,6 +34,7 @@ annotation class FormDescriptor(
     val alert: FormItemAlert = FormItemAlert(),
     val labelPosition: AutoFormLabelPosition = AutoFormLabelPosition.RIGHT,
     val enumSourceKey: String = "",
+    val enumComponent: AutoFormEnumComponent = AutoFormEnumComponent.SELECT,
 ) {
 
     @Retention(AnnotationRetention.RUNTIME)
