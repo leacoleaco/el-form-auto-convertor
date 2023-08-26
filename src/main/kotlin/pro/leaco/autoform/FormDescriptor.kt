@@ -39,7 +39,14 @@ annotation class FormDescriptor(
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.FIELD)
-    annotation class Property(val name: String, val value: String)
+    annotation class Property(val name: String, val value: String, val type: PropertyType = PropertyType.STRING)
+
+    enum class PropertyType {
+        STRING,
+        INT,
+        FLOAT,
+        BOOLEAN,
+    }
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.FIELD)

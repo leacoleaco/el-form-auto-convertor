@@ -177,7 +177,14 @@ object AutoFormDescriptorConverter {
                 ).filter { it.second != null }.toMap()
             }.ifEmpty { null },
             "props" to descriptor.props.associate { p ->
-                p.name to p.value
+                p.name to p.value.let {
+                    when (p.type) {
+                        FormDescriptor.PropertyType.STRING -> it
+                        FormDescriptor.PropertyType.INT -> it.toInt()
+                        FormDescriptor.PropertyType.FLOAT -> it.toFloat()
+                        FormDescriptor.PropertyType.BOOLEAN -> it.toBoolean()
+                    }
+                }
             }.ifEmpty { null },
             "options" to descriptor.options.map { p ->
                 mapOf(
