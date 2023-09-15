@@ -6,7 +6,7 @@
 
     <artifactId>autoform</artifactId>
     <groupId>pro.leaco.dev</groupId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <packaging>jar</packaging>
 
     <url>https://github.com/leacoleaco/el-form-auto-convertor</url>

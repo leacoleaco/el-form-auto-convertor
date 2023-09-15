@@ -102,10 +102,17 @@ object AutoFormDescriptorConverter {
      * convert reflect info to descriptors
      *
      * @param reflectInfoMap
+     * @param defaultValueReplaceMarkMap you can put some mark value here to replace the default value
+     *          e.g.    we set  ("[animal]","dog"),   then if any default value contain "[animal]", it will be replaced by "dog"
+     *          the defaultValue:"the [animal]" will be replaced by "the dog"
      * @return
      */
-    fun convertToDescriptors(reflectInfoMap: Map<String, ReflectInfo>): Map<String, Any?> {
-        return reflectInfoMap.asSequence().map { it.key to convertToDescriptors(it.value) }.toMap()
+    fun convertToDescriptors(
+        reflectInfoMap: Map<String, ReflectInfo>,
+        defaultValueReplaceMarkMap: Map<String, String> = emptyMap()
+    ): Map<String, Any?> {
+        return reflectInfoMap.asSequence().map { it.key to convertToDescriptors(it.value, defaultValueReplaceMarkMap) }
+            .toMap()
     }
 
     fun readClazzDescriptors(dataClazz: Class<*>): Map<String, Any?> {
@@ -116,9 +123,15 @@ object AutoFormDescriptorConverter {
      * convert reflect info to descriptors
      *
      * @param reflectInfo
+     * @param defaultValueReplaceMarkMap you can put some mark value here to replace the default value
+     *          e.g.    we set  ("[animal]","dog"),   then if any default value contain "[animal]", it will be replaced by "dog"
+     *          the defaultValue:"the [animal]" will be replaced by "the dog"
      * @return
      */
-    fun convertToDescriptors(reflectInfo: ReflectInfo): Map<String, Any?> {
+    fun convertToDescriptors(
+        reflectInfo: ReflectInfo,
+        defaultValueReplaceMarkMap: Map<String, String> = emptyMap()
+    ): Map<String, Any?> {
         val descriptor = reflectInfo.descriptor
 
         val componentType =
@@ -142,10 +155,16 @@ object AutoFormDescriptorConverter {
             convertToDescriptors(itemReflectInfo)
         } else null
 
-        val defaultValue =
+        var defaultValue =
             if (componentType !== AutoFormComponentType.WRAP)
                 descriptor.defaultValue.ifEmpty { reflectInfo.defaultValue }
             else null
+
+        if (defaultValue is String && defaultValueReplaceMarkMap.isNotEmpty()) {
+            defaultValueReplaceMarkMap.forEach { (mark, value) ->
+                defaultValue = (defaultValue as String).replace(mark, value)
+            }
+        }
 
         return mapOf(
             "type" to componentType.value,
