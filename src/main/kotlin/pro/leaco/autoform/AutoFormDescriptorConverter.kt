@@ -109,15 +109,18 @@ object AutoFormDescriptorConverter {
      */
     fun convertToDescriptors(
         reflectInfoMap: Map<String, ReflectInfo>,
-        defaultValueReplaceMarkMap: Map<String, String> = emptyMap()
+        defaultValueReplaceMarkMap: Map<String, String> = emptyMap(),
+        optionSources: Map<String, List<LabelValue>> = emptyMap(),
     ): Map<String, Any?> {
-        return reflectInfoMap.asSequence().map { it.key to convertToDescriptors(it.value, defaultValueReplaceMarkMap) }
+        return reflectInfoMap.asSequence()
+            .map { it.key to convertToDescriptors(it.value, defaultValueReplaceMarkMap, optionSources) }
             .toMap()
     }
 
     fun readClazzDescriptors(dataClazz: Class<*>): Map<String, Any?> {
         return convertToDescriptors(readReflectInfo(dataClazz))
     }
+
 
     /**
      * convert reflect info to descriptors
@@ -130,7 +133,8 @@ object AutoFormDescriptorConverter {
      */
     fun convertToDescriptors(
         reflectInfo: ReflectInfo,
-        defaultValueReplaceMarkMap: Map<String, String> = emptyMap()
+        defaultValueReplaceMarkMap: Map<String, String> = emptyMap(),
+        optionSources: Map<String, List<LabelValue>> = emptyMap(),
     ): Map<String, Any?> {
         val descriptor = reflectInfo.descriptor
 
@@ -205,7 +209,14 @@ object AutoFormDescriptorConverter {
                     }
                 }
             }.ifEmpty { null },
-            "options" to descriptor.options.map { p ->
+            "options" to if (descriptor.optionSource.isNotBlank())
+                optionSources[descriptor.optionSource]?.map { p ->
+                    mapOf(
+                        "label" to p.label,
+                        "value" to p.value,
+                    )
+                }
+            else descriptor.options.map { p ->
                 mapOf(
                     "label" to p.label,
                     "value" to p.value,

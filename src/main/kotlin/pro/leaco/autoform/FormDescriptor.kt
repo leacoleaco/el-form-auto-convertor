@@ -10,6 +10,7 @@ import kotlin.reflect.KClass
  * @property disabled 不可编辑
  * @property defaultValue 默认值
  * @property rules 表单校验规则
+ * @property optionSource 如果Option的值希望后期动态提供， 可以在这里设置后期提供的map对应的key参数 see: [pro.leaco.autoform.AutoFormDescriptorConverter.convertToDescriptors(pro.leaco.autoform.ReflectInfo, java.util.Map<java.lang.String,java.lang.String>, java.util.Map<java.lang.String,? extends java.util.List<pro.leaco.autoform.LabelValue>>)]
  * @property componentType 表单项目类型, 默认是AUTO. 如果填写AUTO，则系统会自动判定使用一个最合适的组件; 否则系统会使用要求的组件类型生成表单.
  *              此外，如果填写的是CUSTOM，则还需要在前端 el-form-auto 组件下编写定制的组件插槽，以实现自定义(这个时候数据不完全由后端决定)；
  *              如果找不到对应字段的插槽，则前端会显示为空
@@ -28,6 +29,7 @@ annotation class FormDescriptor(
     val rules: Array<FormRule> = [],
     val props: Array<Property> = [],
     val options: Array<Option> = [],
+    val optionSource: String = "",
     val itemsClass: KClass<*> = Any::class,
     val slotName: String = "",
     val tooltip: FormItemTooltip = FormItemTooltip(),
