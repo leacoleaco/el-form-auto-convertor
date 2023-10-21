@@ -95,6 +95,10 @@ enum class AutoFormComponentType(val value: String) {
                     else -> UNKNOWN
                 }
             } else if (clazz.isArray) ARRAY
+            else if (clazz == java.util.ArrayList::class.java) ARRAY
+            else if (clazz == java.util.Arrays::class.java) ARRAY
+            else if (clazz == List::class.java) ARRAY
+            else if (clazz == Array::class.java) ARRAY
             else if (clazz == Map::class.java) OBJECT
             else if (clazz == Regex::class.java) REGEXP
             else if (clazz == LocalDate::class.java) DATE
