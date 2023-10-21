@@ -83,7 +83,10 @@ object AutoFormDescriptorConverter {
      * @return
      */
     fun <DATA> readReflectInfo(dataClazz: Class<DATA>): Map<String, ReflectInfo> {
-        check(dataClazz.constructors.any { it.parameterCount == 0 }) { "Class '$dataClazz' must have one constructor method with no parameters." }
+
+        if (!dataClazz.isAssignableFrom(List::class.java)) {
+            check(dataClazz.constructors.any { it.parameterCount == 0 }) { "Class '$dataClazz' must have one constructor method with no parameters." }
+        }
         val instance = dataClazz.constructors.first { it.parameterCount == 0 }.newInstance()
         val associate = dataClazz.declaredFields.map { field ->
             val descriptor = field.getAnnotation(FormDescriptor::class.java) ?: return@map null
