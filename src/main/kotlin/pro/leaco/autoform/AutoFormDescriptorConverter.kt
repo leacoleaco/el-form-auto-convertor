@@ -84,7 +84,7 @@ object AutoFormDescriptorConverter {
      */
     fun <DATA> readReflectInfo(dataClazz: Class<DATA>): Map<String, ReflectInfo> {
 
-        if (!dataClazz.isAssignableFrom(List::class.java)) {
+        if (dataClazz != List::class.java && dataClazz != Array::class.java) {
             check(dataClazz.constructors.any { it.parameterCount == 0 }) { "Class '$dataClazz' must have one constructor method with no parameters." }
         }
         val instance = dataClazz.constructors.first { it.parameterCount == 0 }.newInstance()
