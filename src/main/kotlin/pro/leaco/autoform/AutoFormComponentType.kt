@@ -45,9 +45,15 @@ enum class AutoFormComponentType(val value: String) {
 
     /**date	必须是合法的 Date 对象	el-date-picker*/
     DATE("date"),
+    YEAR("date"),
+    MONTH("date"),
+    WEEK("date"),
 
     /**date	必须是合法的 DateTime 对象	el-date-time-picker*/
-    DATE_TIME("datetime"),
+    DATE_TIME("date"),
+
+    DATE_TIME_RANGE("date"),
+    DATE_RANGE("date"),
 
     /**
      * 转换为滑块， 需要是数值类型

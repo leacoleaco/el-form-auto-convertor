@@ -173,6 +173,9 @@ object AutoFormDescriptorConverter {
             }
         }
 
+        val props = buildProps(componentType, descriptor)
+
+
         return mapOf(
             "type" to componentType.value,
             "label" to descriptor.label,
@@ -202,16 +205,7 @@ object AutoFormDescriptorConverter {
                     "whitespace" to if (r.whitespace) true else null,
                 ).filter { it.second != null }.toMap()
             }.ifEmpty { null },
-            "props" to descriptor.props.associate { p ->
-                p.name to p.value.let {
-                    when (p.type) {
-                        FormDescriptor.PropertyType.STRING -> it
-                        FormDescriptor.PropertyType.INT -> it.toInt()
-                        FormDescriptor.PropertyType.FLOAT -> it.toFloat()
-                        FormDescriptor.PropertyType.BOOLEAN -> it.toBoolean()
-                    }
-                }
-            }.ifEmpty { null },
+            "props" to props,
             "options" to if (descriptor.optionSource.isNotBlank())
                 optionSources[descriptor.optionSource]?.map { p ->
                     mapOf(
@@ -261,6 +255,58 @@ object AutoFormDescriptorConverter {
             "itemDescriptor" to itemDescriptor?.ifEmpty { null },
             "fields" to wrapFieldDescriptor?.ifEmpty { null },
         )
+    }
+
+    private fun buildProps(
+        componentType: AutoFormComponentType,
+        descriptor: FormDescriptor
+    ): MutableMap<String, Any> {
+        val props = mutableMapOf<String, Any>()
+
+        when (componentType) {
+            AutoFormComponentType.YEAR -> {
+                props["type"] = "year"
+            }
+
+            AutoFormComponentType.MONTH -> {
+                props["type"] = "month"
+            }
+
+            AutoFormComponentType.DATE -> {
+                props["type"] = "date"
+            }
+
+            AutoFormComponentType.WEEK -> {
+                props["type"] = "week"
+            }
+
+            AutoFormComponentType.DATE_TIME -> {
+                props["type"] = "datetime"
+            }
+
+            AutoFormComponentType.DATE_RANGE -> {
+                props["type"] = "daterange"
+            }
+
+            AutoFormComponentType.DATE_TIME_RANGE -> {
+                props["type"] = "datetimerange"
+            }
+
+            else -> {}
+        }
+
+
+        descriptor.props.associate { p ->
+            p.name to p.value.let {
+                when (p.type) {
+                    FormDescriptor.PropertyType.STRING -> it
+                    FormDescriptor.PropertyType.INT -> it.toInt()
+                    FormDescriptor.PropertyType.FLOAT -> it.toFloat()
+                    FormDescriptor.PropertyType.BOOLEAN -> it.toBoolean()
+                }
+            }
+        }.ifEmpty { null }?.forEach { (k, v) -> props[k] = v }
+        return props
     }
 
 
