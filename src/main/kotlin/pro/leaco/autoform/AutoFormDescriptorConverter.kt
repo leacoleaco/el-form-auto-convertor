@@ -274,6 +274,9 @@ object AutoFormDescriptorConverter {
 
             AutoFormComponentType.DATE -> {
                 props["type"] = "date"
+                props["format"] = "YYYY-MM-dd"
+                props["value-format"] = "YYYY-MM-dd"
+                props["date-format"] = "YYYY-MM-dd"
             }
 
             AutoFormComponentType.WEEK -> {
@@ -282,14 +285,25 @@ object AutoFormDescriptorConverter {
 
             AutoFormComponentType.DATE_TIME -> {
                 props["type"] = "datetime"
+                props["format"] = "YYYY-MM-DD HH:mm:ss"
+                props["date-format"] = "YYYY-MM-DD HH:mm:ss"
+                props["value-format"] = "YYYY-MM-DD HH:mm:ss"
+                props["time"] = "HH:mm:ss"
             }
 
             AutoFormComponentType.DATE_RANGE -> {
                 props["type"] = "daterange"
+                props["format"] = "YYYY-MM-DD"
+                props["value-format"] = "YYYY-MM-DD"
+                props["date-format"] = "YYYY-MM-DD"
             }
 
             AutoFormComponentType.DATE_TIME_RANGE -> {
                 props["type"] = "datetimerange"
+                props["format"] = "YYYY-MM-DD HH:mm:ss"
+                props["value-format"] = "YYYY-MM-DD HH:mm:ss"
+                props["date-format"] = "YYYY-MM-DD"
+                props["time"] = "HH:mm:ss"
             }
 
             else -> {}
