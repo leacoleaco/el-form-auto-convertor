@@ -274,9 +274,9 @@ object AutoFormDescriptorConverter {
 
             AutoFormComponentType.DATE -> {
                 props["type"] = "date"
-                props["format"] = "YYYY-MM-dd"
-                props["value-format"] = "YYYY-MM-dd"
-                props["date-format"] = "YYYY-MM-dd"
+                props["format"] = "YYYY-MM-DD"
+                props["value-format"] = "YYYY-MM-DD"
+                props["date-format"] = "YYYY-MM-DD"
             }
 
             AutoFormComponentType.WEEK -> {
