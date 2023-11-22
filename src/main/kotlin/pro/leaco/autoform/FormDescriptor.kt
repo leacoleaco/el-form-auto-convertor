@@ -54,6 +54,14 @@ annotation class FormDescriptor(
     @Target(AnnotationTarget.FIELD)
     annotation class Option(val label: String, val value: String)
 
+    /**
+     * put this on enum class
+     * framework will auto detected it
+     */
+    @Retention(AnnotationRetention.RUNTIME)
+    @Target(AnnotationTarget.FIELD)
+    annotation class OptionLabel(val label: String)
+
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.FIELD)
     annotation class FormItemTooltip(

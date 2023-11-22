@@ -176,6 +176,9 @@ object AutoFormDescriptorConverter {
         val props = buildProps(componentType, descriptor)
 
 
+        val options = buildOptions(componentType, reflectInfo, optionSources)
+
+
         return mapOf(
             "type" to componentType.value,
             "label" to descriptor.label,
@@ -206,19 +209,7 @@ object AutoFormDescriptorConverter {
                 ).filter { it.second != null }.toMap()
             }.ifEmpty { null },
             "props" to props,
-            "options" to if (descriptor.optionSource.isNotBlank())
-                optionSources[descriptor.optionSource]?.map { p ->
-                    mapOf(
-                        "label" to p.label,
-                        "value" to p.value,
-                    )
-                }
-            else descriptor.options.map { p ->
-                mapOf(
-                    "label" to p.label,
-                    "value" to p.value,
-                )
-            }.ifEmpty { null },
+            "options" to options,
             "slotName" to descriptor.slotName.ifBlank { null },
             "tooltip" to descriptor.tooltip.let {
                 if (it.content.isBlank()) return@let null
@@ -255,6 +246,46 @@ object AutoFormDescriptorConverter {
             "itemDescriptor" to itemDescriptor?.ifEmpty { null },
             "fields" to wrapFieldDescriptor?.ifEmpty { null },
         )
+    }
+
+    private fun buildOptions(
+        componentType: AutoFormComponentType,
+        reflectInfo: ReflectInfo,
+        optionSources: Map<String, List<LabelValue>>
+    ): List<Map<String, Any?>>? {
+
+        // key-value pair
+        val r = mutableMapOf<String, Any?>()
+
+        if (componentType == AutoFormComponentType.ENUM) {
+            //auto get enum options
+            val field = reflectInfo.field
+            if (field.type.isEnum) {
+                field.type.enumConstants?.forEach {
+                    val enumName = it.toString()
+                    val f = field.type.getField(enumName)
+                    val l = f.getAnnotation(FormDescriptor.OptionLabel::class.java)
+                    r[l?.label ?: enumName] = enumName
+                }
+            }
+        }
+
+        val descriptor = reflectInfo.descriptor
+        //重写或者补充选项
+        val customOpts = (if (descriptor.optionSource.isNotBlank())
+            optionSources[descriptor.optionSource]?.map { p -> p.label to p.value }
+        else descriptor.options.map { p -> p.label to p.value }.ifEmpty { null })
+
+        customOpts?.forEach {
+            r[it.first] = it.second
+        }
+
+        return r.map { (k, v) ->
+            mapOf(
+                "label" to k,
+                "value" to v,
+            )
+        }
     }
 
     private fun buildProps(
