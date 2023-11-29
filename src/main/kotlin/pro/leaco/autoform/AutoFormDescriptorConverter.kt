@@ -113,7 +113,7 @@ object AutoFormDescriptorConverter {
     fun convertToDescriptors(
         reflectInfoMap: Map<String, ReflectInfo>,
         defaultValueReplaceMarkMap: Map<String, String> = emptyMap(),
-        optionSources: Map<String, List<LabelValue>> = emptyMap(),
+        optionSources: Map<String, () -> List<LabelValue>> = emptyMap(),
     ): Map<String, Any?> {
         return reflectInfoMap.asSequence()
             .map { it.key to convertToDescriptors(it.value, defaultValueReplaceMarkMap, optionSources) }
@@ -137,7 +137,7 @@ object AutoFormDescriptorConverter {
     fun convertToDescriptors(
         reflectInfo: ReflectInfo,
         defaultValueReplaceMarkMap: Map<String, String> = emptyMap(),
-        optionSources: Map<String, List<LabelValue>> = emptyMap(),
+        optionSources: Map<String, () -> List<LabelValue>> = emptyMap(),
     ): Map<String, Any?> {
         val descriptor = reflectInfo.descriptor
 
@@ -251,7 +251,7 @@ object AutoFormDescriptorConverter {
     private fun buildOptions(
         componentType: AutoFormComponentType,
         reflectInfo: ReflectInfo,
-        optionSources: Map<String, List<LabelValue>>
+        optionSources: Map<String, () -> List<LabelValue>>
     ): List<Map<String, Any?>>? {
 
         // key-value pair
@@ -273,7 +273,7 @@ object AutoFormDescriptorConverter {
         val descriptor = reflectInfo.descriptor
         //重写或者补充选项
         val customOpts = (if (descriptor.optionSource.isNotBlank())
-            optionSources[descriptor.optionSource]?.map { p -> p.label to p.value }
+            optionSources[descriptor.optionSource]?.invoke()?.map { p -> p.label to p.value }
         else descriptor.options.map { p -> p.label to p.value }.ifEmpty { null })
 
         customOpts?.forEach {
