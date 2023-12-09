@@ -211,7 +211,7 @@ object AutoFormDescriptorConverter {
             "props" to props,
             "options" to options,
             "dependOnProp" to descriptor.dependOnProp.ifBlank { null },
-            "dependOnPropRevert" to descriptor.dependOnPropRevert.ifBlank { null },
+            "dependOnPropRevert" to if (descriptor.dependOnPropRevert) "1" else null,
             "slotName" to descriptor.slotName.ifBlank { null },
             "tooltip" to descriptor.tooltip.let {
                 if (it.content.isBlank()) return@let null

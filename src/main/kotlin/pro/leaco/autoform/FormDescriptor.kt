@@ -41,7 +41,7 @@ annotation class FormDescriptor(
     val enumSourceKey: String = "",
     val enumComponent: AutoFormEnumComponent = AutoFormEnumComponent.SELECT,
     val dependOnProp: String = "",
-    val dependOnPropRevert: String = "",
+    val dependOnPropRevert: Boolean = false,
 ) {
 
     @Retention(AnnotationRetention.RUNTIME)
