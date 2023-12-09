@@ -18,6 +18,9 @@ import kotlin.reflect.KClass
  *              把所有枚举数据绑定到 el-form-auto 组件的 :enum-source 属性上， 然后在此处填写对应的 key 即可
  *              枚举数据的格式为 {key:[{label: 'xxx', value: 'xxx'}],...}
  *
+ * @property dependOnProp 当前字段的显示依赖的其它字段， 当其它字段值为true或者存在时, 本字段才显示
+ * @property dependOnPropRevert 反转 dependOnProp 依赖的值
+ *
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD)
@@ -37,10 +40,11 @@ annotation class FormDescriptor(
     val labelPosition: AutoFormLabelPosition = AutoFormLabelPosition.RIGHT,
     val enumSourceKey: String = "",
     val enumComponent: AutoFormEnumComponent = AutoFormEnumComponent.SELECT,
+    val dependOnProp: String = "",
+    val dependOnPropRevert: String = "",
 ) {
 
     @Retention(AnnotationRetention.RUNTIME)
-    @Target(AnnotationTarget.FIELD)
     annotation class Property(val name: String, val value: String, val type: PropertyType = PropertyType.STRING)
 
     enum class PropertyType {
@@ -51,7 +55,6 @@ annotation class FormDescriptor(
     }
 
     @Retention(AnnotationRetention.RUNTIME)
-    @Target(AnnotationTarget.FIELD)
     annotation class Option(val label: String, val value: String)
 
     /**
@@ -59,11 +62,9 @@ annotation class FormDescriptor(
      * framework will auto detected it
      */
     @Retention(AnnotationRetention.RUNTIME)
-    @Target(AnnotationTarget.FIELD)
     annotation class OptionLabel(val label: String)
 
     @Retention(AnnotationRetention.RUNTIME)
-    @Target(AnnotationTarget.FIELD)
     annotation class FormItemTooltip(
         val content: String = "",
         val placement: String = "top",
@@ -78,7 +79,6 @@ annotation class FormDescriptor(
     )
 
     @Retention(AnnotationRetention.RUNTIME)
-    @Target(AnnotationTarget.FIELD)
     annotation class FormItemAlert(
         val message: String = "",
         val title: String = "",
@@ -89,5 +89,18 @@ annotation class FormDescriptor(
         val showIcon: Boolean = true,
         val center: Boolean = false,
         val effect: String = "light",
+        // 使用slot的方式自定义alert的内容
+        val messageSlot: String = "",
+        // 使用slot的方式自定义alert的内容时可以传入的props
+        val props: Array<Property> = [],
+    )
+
+
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class TipDataSource(
+        // 数据关键词
+        val key: String,
+        // 数据源地址, 该地址返回数据默认格式需要为: {code:0,data:'xxxxxx'} ,那么这里就可以取得返回的值 xxx 进行展示
+        val url: String,
     )
 }

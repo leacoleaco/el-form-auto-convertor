@@ -173,7 +173,7 @@ object AutoFormDescriptorConverter {
             }
         }
 
-        val props = buildProps(componentType, descriptor)
+        val props = buildProps(componentType, descriptor.props)
 
 
         val options = buildOptions(componentType, reflectInfo, optionSources)
@@ -210,6 +210,8 @@ object AutoFormDescriptorConverter {
             }.ifEmpty { null },
             "props" to props,
             "options" to options,
+            "dependOnProp" to descriptor.dependOnProp.ifBlank { null },
+            "dependOnPropRevert" to descriptor.dependOnPropRevert.ifBlank { null },
             "slotName" to descriptor.slotName.ifBlank { null },
             "tooltip" to descriptor.tooltip.let {
                 if (it.content.isBlank()) return@let null
@@ -227,9 +229,11 @@ object AutoFormDescriptorConverter {
                 )
             },
             "alert" to descriptor.alert.let {
-                if (it.message.isBlank()) return@let null
+                if (it.message.isBlank() && it.messageSlot.isBlank()) return@let null
                 return@let mapOf(
-                    "message" to it.message,
+                    "message" to it.message.ifBlank { null },
+                    "messageSlot" to it.messageSlot.ifBlank { null },
+                    "props" to applyProps(it.props, mutableMapOf<String, Any>()),
                     "type" to it.type,
                     "showIcon" to it.showIcon,
                     "closable" to it.closable,
@@ -290,7 +294,7 @@ object AutoFormDescriptorConverter {
 
     private fun buildProps(
         componentType: AutoFormComponentType,
-        descriptor: FormDescriptor
+        propertys: Array<FormDescriptor.Property>
     ): MutableMap<String, Any> {
         val props = mutableMapOf<String, Any>()
 
@@ -341,7 +345,14 @@ object AutoFormDescriptorConverter {
         }
 
 
-        descriptor.props.associate { p ->
+        return applyProps(propertys, props)
+    }
+
+    private fun applyProps(
+        propertys: Array<FormDescriptor.Property>,
+        props: MutableMap<String, Any>
+    ): MutableMap<String, Any> {
+        propertys.associate { p ->
             p.name to p.value.let {
                 when (p.type) {
                     FormDescriptor.PropertyType.STRING -> it
