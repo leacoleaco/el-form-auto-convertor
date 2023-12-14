@@ -3,6 +3,7 @@ package pro.leaco.autoform
 import com.google.gson.*
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
+import java.lang.reflect.ParameterizedType
 import kotlin.reflect.jvm.kotlinProperty
 
 object AutoFormDescriptorConverter {
@@ -175,9 +176,11 @@ object AutoFormDescriptorConverter {
 
         val props = buildProps(componentType, descriptor.props)
 
-
         val options = buildOptions(componentType, reflectInfo, optionSources)
 
+        val isEnumMultiple =
+            componentType == AutoFormComponentType.ENUM && (
+                    reflectInfo.field.type.isArray || reflectInfo.field.type.isAssignableFrom(List::class.java))
 
         return mapOf(
             "type" to componentType.value,
@@ -210,6 +213,7 @@ object AutoFormDescriptorConverter {
             }.ifEmpty { null },
             "props" to props,
             "options" to options,
+            "multiple" to isEnumMultiple,
             "dependOnProp" to descriptor.dependOnProp.ifBlank { null },
             "dependOnPropRevert" to if (descriptor.dependOnPropRevert) "1" else null,
             "slotName" to descriptor.slotName.ifBlank { null },
@@ -264,12 +268,29 @@ object AutoFormDescriptorConverter {
         if (componentType == AutoFormComponentType.ENUM) {
             //auto get enum options
             val field = reflectInfo.field
-            if (field.type.isEnum) {
-                field.type.enumConstants?.forEach {
+            val clazz = field.type
+            if (clazz.isEnum) {
+                clazz.enumConstants?.forEach {
                     val enumName = it.toString()
-                    val f = field.type.getField(enumName)
+                    val f = clazz.getField(enumName)
                     val l = f.getAnnotation(FormDescriptor.OptionLabel::class.java)
                     r[l?.label ?: enumName] = enumName
+                }
+            } else if (clazz.isArray || clazz.isAssignableFrom(List::class.java)) {
+                val genericType = field.genericType
+                if (genericType is ParameterizedType) {
+                    val actualTypeArguments = genericType.actualTypeArguments
+                    if (actualTypeArguments.isNotEmpty() && actualTypeArguments[0] is Class<*>) {
+                        val aClass = actualTypeArguments[0] as Class<*>
+                        if (aClass.isEnum) {
+                            aClass.enumConstants?.forEach {
+                                val enumName = it.toString()
+                                val f = aClass.getField(enumName)
+                                val l = f.getAnnotation(FormDescriptor.OptionLabel::class.java)
+                                r[l?.label ?: enumName] = enumName
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -294,11 +315,13 @@ object AutoFormDescriptorConverter {
 
     private fun buildProps(
         componentType: AutoFormComponentType,
-        propertys: Array<FormDescriptor.Property>
+        properties: Array<FormDescriptor.Property>
     ): MutableMap<String, Any> {
         val props = mutableMapOf<String, Any>()
 
         when (componentType) {
+
+
             AutoFormComponentType.YEAR -> {
                 props["type"] = "year"
             }
@@ -345,7 +368,7 @@ object AutoFormDescriptorConverter {
         }
 
 
-        return applyProps(propertys, props)
+        return applyProps(properties, props)
     }
 
     private fun applyProps(
