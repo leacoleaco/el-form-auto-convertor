@@ -364,6 +364,20 @@ object AutoFormDescriptorConverter {
                 props["time"] = "HH:mm:ss"
             }
 
+            AutoFormComponentType.TIME -> {
+                props["type"] = "time"
+                props["format"] = "HH:mm:ss"
+                props["value-format"] = "HH:mm:ss"
+                props["date-format"] = "HH:mm:ss"
+            }
+
+            AutoFormComponentType.TIME_RANGE -> {
+                props["type"] = "timeRange"
+                props["format"] = "HH:mm:ss"
+                props["value-format"] = "HH:mm:ss"
+                props["date-format"] = "HH:mm:ss"
+            }
+
             else -> {}
         }
 

@@ -55,6 +55,10 @@ enum class AutoFormComponentType(val value: String) {
     DATE_TIME_RANGE("date"),
     DATE_RANGE("date"),
 
+    /**date	必须是合法的 Time 对象	el-time-picker*/
+    TIME("time"),
+    TIME_RANGE("timeRange"),
+
     /**
      * 转换为滑块， 需要是数值类型
      */
