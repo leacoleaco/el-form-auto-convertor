@@ -84,6 +84,9 @@ object AutoFormDescriptorConverter {
      * @return
      */
     fun <DATA> readReflectInfo(dataClazz: Class<DATA>): Map<String, ReflectInfo> {
+        if (dataClazz.isEnum) {
+            return emptyMap()
+        }
 
         if (dataClazz != List::class.java && dataClazz != Array::class.java) {
             check(dataClazz.constructors.any { it.parameterCount == 0 }) { "Class '$dataClazz' must have one constructor method with no parameters." }
