@@ -1,6 +1,7 @@
 package pro.leaco.autoform
 
 import com.google.gson.*
+import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import java.lang.reflect.ParameterizedType
@@ -45,6 +46,7 @@ object AutoFormDescriptorConverter {
     fun <DATA> convert(dataClazz: Class<DATA>, config: JsonObject, reflectInfoMap: Map<String, ReflectInfo>): DATA {
         val data = dataClazz.constructors.first { it.parameterCount == 0 }.newInstance() as DATA
         reflectInfoMap.forEach { (fieldName, info) ->
+            //转换config的对应值到value
             val value = convertToValueByDescriptor(config.get(fieldName), info)
 
             //反射注入值
@@ -68,11 +70,16 @@ object AutoFormDescriptorConverter {
         ele: JsonElement?,
         reflectInfo: ReflectInfo
     ): Any? {
-        val clazz = reflectInfo.field.type
+        val clazz = reflectInfo.field.genericType
         if (ele == null || ele is JsonNull) {
             return null
         }
-        return GSON.fromJson(ele, clazz)
+        return if (clazz is ParameterizedType) {
+            val typeToken = TypeToken.get(clazz)
+            return GSON.fromJson(ele, typeToken.type)
+        } else {
+            return GSON.fromJson(ele, clazz)
+        }
     }
 
 
