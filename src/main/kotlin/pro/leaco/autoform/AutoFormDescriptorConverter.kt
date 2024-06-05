@@ -4,24 +4,26 @@ import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
+import pro.leaco.autoform.typeadapter.TimeType.LocalDateTimeTypeAdapter
+import pro.leaco.autoform.typeadapter.TimeType.LocalDateTypeAdapter
+import pro.leaco.autoform.typeadapter.TimeType.LocalTimeTypeAdapter
+import pro.leaco.autoform.typeadapter.VueFormTypeAdapter
 import java.lang.reflect.ParameterizedType
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import kotlin.reflect.jvm.kotlinProperty
 
 object AutoFormDescriptorConverter {
 
-    val GSON: Gson = GsonBuilder()
+    var GSON: Gson = GsonBuilder()
         .registerTypeAdapter(AutoFormComponentType::class.java, VueFormTypeAdapter)
+        .registerTypeAdapter(LocalDate::class.java, LocalDateTypeAdapter())
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeTypeAdapter())
+        .registerTypeAdapter(LocalTime::class.java, LocalTimeTypeAdapter())
         .create()
 
-    object VueFormTypeAdapter : TypeAdapter<AutoFormComponentType>() {
-        override fun write(w: JsonWriter, data: AutoFormComponentType) {
-            w.value(data.value)
-        }
 
-        override fun read(r: JsonReader): AutoFormComponentType {
-            return AutoFormComponentType.parse(r.nextString())
-        }
-    }
 
     /**
      * convert json object to Data
