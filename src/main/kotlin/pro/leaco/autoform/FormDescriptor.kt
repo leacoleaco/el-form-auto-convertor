@@ -66,15 +66,46 @@ annotation class FormDescriptor(
 
     @Retention(AnnotationRetention.RUNTIME)
     annotation class FormItemTooltip(
+        /**
+         * 显示的内容，也可被 slot#content 覆盖
+         */
         val content: String = "",
+        /**
+         * Tooltip 组件出现的位置
+         */
         val placement: String = "top",
+        /**
+         * Tooltip 主题，内置了 dark / light 两种
+         */
         val effect: String = "dark",
+        /**
+         * 出现位置的偏移量
+         */
         val offset: Int = 0,
+        /**
+         * 动画名称
+         */
         val transition: String = "",
+        /**
+         * 在触发后多久显示内容，单位毫秒
+         */
         val showAfter: Int = 0,
+        /**
+         * tooltip 的内容是否有箭头
+         */
         val showArrow: Boolean = true,
+        /**
+         * 延迟关闭，单位毫秒
+         */
         val hideAfter: Int = 0,
-        val autoClose: Boolean = true,
+        /**
+         * tooltip 出现后自动隐藏延时，单位毫秒
+         */
+        val autoClose: Int = 0,
+        /**
+         * 如何触发显示 Tooltip
+         * 'hover' | 'click' | 'focus' | 'contextmenu'
+         */
         val trigger: String = "hover",
     )
 
